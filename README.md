@@ -237,7 +237,6 @@ The application provides a foundation that can easily be expanded with:
 
 # Screenshots
 
-Add screenshots such as:
 
 * GitHub Actions
 
