@@ -66,7 +66,7 @@ data "aws_iam_policy_document" "github_actions_assume_role_policy" {
       variable = "token.actions.githubusercontent.com:sub"
 
       values = [
-        "repo:${var.github_repository}:*"
+        "repo:Izharn001@212381275/en-automotive-ecs@1306515144:*"
       ]
     }
   }
