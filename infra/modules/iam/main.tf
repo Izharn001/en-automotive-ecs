@@ -113,7 +113,15 @@ data "aws_iam_policy_document" "github_actions_permissions" {
       "iam:DeletePolicyVersion",
       "iam:DeletePolicy",
       "iam:TagPolicy",
-      "iam:UntagPolicy"
+      "iam:UntagPolicy",
+      "iam:GetOpenIDConnectProvider",
+      "iam:CreateOpenIDConnectProvider",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
+      "iam:AddClientIDToOpenIDConnectProvider",
+      "iam:RemoveClientIDFromOpenIDConnectProvider",
+      "iam:TagOpenIDConnectProvider",
+      "iam:UntagOpenIDConnectProvider"
     ]
 
     resources = ["*"]
