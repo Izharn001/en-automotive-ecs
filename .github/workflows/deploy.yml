@@ -1,0 +1,104 @@
+name: Deploy to ECS
+
+on:
+  workflow_run:
+    workflows:
+      - Docker Build and Push
+    types:
+      - completed
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  AWS_REGION: eu-west-2
+  TF_WORKING_DIR: infra
+
+jobs:
+  deploy:
+    name: Terraform deploy
+
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: production-deployment
+      cancel-in-progress: false
+
+    steps:
+      - name: Check out deployed commit
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform format check
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform fmt -check -recursive
+
+      - name: Terraform initialise
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        env:
+          TF_VAR_ecr_image_tag: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          terraform plan \
+            -input=false \
+            -out=tfplan
+
+      - name: Terraform apply
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -input=false -auto-approve tfplan
+
+      - name: Get application URL
+        id: app-url
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          ALB_DNS=$(terraform output -raw alb_dns_name)
+          echo "url=http://$ALB_DNS" >> "$GITHUB_OUTPUT"
+
+      - name: Post-deployment health check
+        env:
+          APP_URL: ${{ steps.app-url.outputs.url }}
+        run: |
+          echo "Checking $APP_URL/health"
+
+          for attempt in {1..12}; do
+            if curl \
+              --fail \
+              --silent \
+              --show-error \
+              --max-time 10 \
+              "$APP_URL/health"; then
+
+              echo "Application is healthy"
+              exit 0
+            fi
+
+            echo "Attempt $attempt failed. Retrying in 10 seconds..."
+            sleep 10
+          done
+
+          echo "Application failed its post-deployment health check"
+          exit 1
