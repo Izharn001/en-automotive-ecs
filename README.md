@@ -1,4 +1,3 @@
-# EN Automotive - Vehicle Stock Management Platform
 <h1 align="center">
 EN Automotive - Vehicle Stock Management Platform
 </h1>
