@@ -1,11 +1,9 @@
 name: Docker Build and Push
 
 on:
-  workflow_run:
-    workflows:
-      - CI
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -19,18 +17,12 @@ jobs:
   build-and-push:
     name: Build and push to ECR
 
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_branch == 'main'
-
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out successful commit
         uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+       
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
@@ -45,11 +37,11 @@ jobs:
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.event.workflow_run.head_sha }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           IMAGE_URI="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
           echo "Building $IMAGE_URI"
 
-          docker build -t "$IMAGE_URI" .
+          docker build -t "$IMAGE_URI" ./app
           docker push "$IMAGE_URI"
