@@ -20,11 +20,6 @@ The aim of this project was to gain hands-on experience building a cloud-native 
 
 # Architecture
 
-# Architecture
-
-<p align="center">
-  <img src="images/architecture.png" alt="Architecture Diagram" width="1000">
-</p>
 
 The application is deployed using the following workflow:
 
@@ -244,17 +239,17 @@ The application provides a foundation that can easily be expanded with:
 
 Add screenshots such as:
 
-* GitHub Actions workflow
+* GitHub Actions
 
 ![GitHub Actions](images/github_actions_workflow.png)
 
 * Amazon ECS Cluster
 
-![ECS Cluster](images/ECS cluster.png)
+![ECS Cluster](images/ECS_cluster.png)
 
 * Amazon ECR Repository
 
-![ECR](images/ECR Repo.png)
+![ECR](images/ECR_Repo.png)
 
 * Application Load Balancer
 
@@ -262,7 +257,7 @@ Add screenshots such as:
 
 * CloudWatch Logs
 
-![Cloudwatch Logs](images/Cloudwatch logs.png)
+![Cloudwatch Logs](images/Cloudwatch_logs.png)
 
 * Running application
 
