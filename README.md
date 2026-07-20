@@ -261,7 +261,7 @@ Add screenshots such as:
 
 * Running application
 
-![Application](images/app.png)
+![Application](images/App.png)
 
 ---
 
