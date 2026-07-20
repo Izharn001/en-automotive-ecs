@@ -11,7 +11,7 @@ resource "aws_iam_role_policy_attachment" "this" {
 
 data "aws_iam_policy_document" "assume_role_policy" {
   statement {
-    effect    = "Allow"
+    effect  = "Allow"
     actions = ["sts:AssumeRole"]
 
     principals {

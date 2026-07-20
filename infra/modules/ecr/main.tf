@@ -15,4 +15,4 @@ resource "aws_ecr_repository" "app" {
   }
 
   tags = var.tags
-  }
+}

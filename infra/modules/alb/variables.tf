@@ -11,17 +11,17 @@ variable "target_group_port" {
 }
 
 variable "target_group_protocol" {
-  type = string
+  type    = string
   default = "HTTP"
 }
 
 variable "listener_port" {
-  type = number
+  type    = number
   default = 80
 }
 
 variable "listener_protocol" {
-  type = string
+  type    = string
   default = "HTTP"
 }
 
@@ -38,32 +38,32 @@ variable "subnet_ids" {
 }
 
 variable "health_check_path" {
-  type = string
+  type    = string
   default = "/"
 }
 
 variable "health_check_interval" {
-  type = number
+  type    = number
   default = 30
 }
 
 variable "health_check_timeout" {
-  type = number
+  type    = number
   default = 5
 }
 
 variable "health_check_healthy_threshold" {
-  type = number
+  type    = number
   default = 2
 }
 
 variable "health_check_unhealthy_threshold" {
-  type = number
+  type    = number
   default = 2
 }
 
 variable "health_check_matcher" {
-  type = string
+  type    = string
   default = "200"
 }
 

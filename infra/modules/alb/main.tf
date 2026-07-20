@@ -11,10 +11,10 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "main" {
-  name     = var.target_group_name
-  port     = var.target_group_port
-  protocol = var.target_group_protocol
-  vpc_id   = var.vpc_id
+  name        = var.target_group_name
+  port        = var.target_group_port
+  protocol    = var.target_group_protocol
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
@@ -50,14 +50,14 @@ resource "aws_security_group" "alb" {
     to_port     = var.listener_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    tags = var.tags
   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = var.tags
+}
