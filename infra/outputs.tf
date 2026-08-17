@@ -13,3 +13,11 @@ output "ecs_cluster_name" {
 output "github_actions_role_arn" {
   value = module.iam.github_actions_role_arn
 }
+
+output "zone_id" {
+  value = module.route53.zone_id
+}
+
+output "name_servers" {
+  value = module.route53.name_servers
+}

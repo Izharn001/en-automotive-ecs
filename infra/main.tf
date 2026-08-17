@@ -23,8 +23,9 @@ module "alb" {
   target_group_port   = var.target_group_port
   security_group_name = "${var.project_name}-alb-sg"
 
-  vpc_id     = module.network.vpc_id
-  subnet_ids = module.network.public_subnet_ids
+  certificate_arn = module.acm.certificate_arn
+  vpc_id          = module.network.vpc_id
+  subnet_ids      = module.network.public_subnet_ids
 
   tags = local.common_tags
 }
@@ -68,3 +69,22 @@ module "ecs" {
   tags = local.common_tags
 }
 
+module "route53" {
+  source = "./modules/route53"
+
+  domain_name = "enautomotive.co.uk"
+  subdomain   = "ecs.enautomotive.co.uk"
+
+  alb_dns_name = module.alb.alb_dns_name
+  alb_zone_id  = module.alb.alb_zone_id
+
+}
+
+
+
+module "acm" {
+  source = "./modules/acm"
+
+  domain_name = "ecs.enautomotive.co.uk"
+  zone_id     = module.route53.zone_id
+}

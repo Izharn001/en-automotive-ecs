@@ -32,9 +32,42 @@ app.get("/health", (req, res) => {
   });
 });
 
-
-// listen on port 3000
 const PORT = process.env.PORT || 3000;
+const APP_NAME = process.env.APP_NAME || "EN Automotive";
+const ENVIRONMENT = process.env.ENVIRONMENT || "development";
+
+app.get("/info", (req, res) => {
+  res.status(200).json({
+    app: APP_NAME,
+    environment: ENVIRONMENT
+  });
+});
+
+app.get("/api/secret-check", (req, res) => {
+  const suppliedKey = req.headers["x-api-key"];
+
+  if (!process.env.API_KEY) {
+    return res.status(500).json({
+      error: "API key is not configured"
+    });
+  }
+
+  if (suppliedKey !== process.env.API_KEY) {
+    return res.status(401).json({
+      error: "Unauthorized"
+    });
+  }
+
+  res.status(200).json({
+    authenticated: true
+  });
+});
+
+
+
+// Listen on configured port
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(
+    `${APP_NAME} is running on port ${PORT} in ${ENVIRONMENT}`
+  );
 });

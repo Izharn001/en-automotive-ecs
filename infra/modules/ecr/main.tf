@@ -11,7 +11,7 @@ resource "aws_ecr_repository" "app" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = var.tags
