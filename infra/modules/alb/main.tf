@@ -35,14 +35,14 @@ resource "aws_lb_listener" "main" {
   protocol          = var.listener_protocol
 
   default_action {
-    type             = "redirect"
+    type = "redirect"
 
     redirect {
-      port = "443"
-      protocol =  "HTTPS"
+      port        = "443"
+      protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
-  
+
   }
 }
 
@@ -72,11 +72,11 @@ resource "aws_security_group" "alb" {
   }
 
   ingress {
-  from_port   = 443
-  to_port     = 443
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-}
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
