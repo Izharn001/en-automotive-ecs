@@ -8,7 +8,6 @@ module "ecr" {
 module "network" {
   source = "./modules/network"
 
-  project_name        = var.project_name
   vpc_cidr            = var.vpc_cidr
   public_subnet_cidrs = var.public_subnet_cidrs
   availability_zones  = var.availability_zones
@@ -34,8 +33,6 @@ module "iam" {
   source = "./modules/iam"
 
   iam_role_name              = "${var.project_name}-ecs-execution-role"
-  github_repository          = var.github_repository
-  github_branch              = var.github_branch
   terraform_state_bucket_arn = var.terraform_state_bucket_arn
 
   tags = local.common_tags

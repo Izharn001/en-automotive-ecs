@@ -69,17 +69,6 @@ variable "log_retention_in_days" {
   default = 14
 }
 
-variable "github_repository" {
-  description = "GitHub repository in owner/repository format"
-  type        = string
-  default     = "Izharn001/en-automotive-ecs"
-}
-
-variable "github_branch" {
-  description = "GitHub branch allowed to deploy"
-  type        = string
-  default     = "main"
-}
 
 variable "terraform_state_bucket_arn" {
   description = "ARN of the Terraform state bucket"
