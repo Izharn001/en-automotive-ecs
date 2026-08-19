@@ -58,6 +58,17 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform validate
 
+      - name: Set up TFLint
+        uses: terraform-linters/setup-tflint@v6
+
+      - name: Initialise TFLint
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: tflint --init
+
+      - name: Run TFLint
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: tflint --recursive
+
       - name: Terraform plan
         working-directory: ${{ env.TF_WORKING_DIR }}
         env:
@@ -73,10 +84,8 @@ jobs:
 
       - name: Get application URL
         id: app-url
-        working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
-          ALB_DNS=$(terraform output -raw alb_dns_name)
-          echo "url=http://$ALB_DNS" >> "$GITHUB_OUTPUT"
+          echo "url=https://ecs.enautomotive.co.uk" >> "$GITHUB_OUTPUT"
 
       - name: Post-deployment health check
         env:
