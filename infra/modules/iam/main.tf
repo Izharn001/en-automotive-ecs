@@ -156,6 +156,48 @@ data "aws_iam_policy_document" "github_actions_permissions" {
       "${var.terraform_state_bucket_arn}/*"
     ]
   }
+
+  statement {
+    sid    = "ManageACM"
+    effect = "Allow"
+
+    actions = [
+      "acm:DescribeCertificate",
+      "acm:ListTagsForCertificate",
+      "acm:RequestCertificate",
+      "acm:AddTagsToCertificate",
+      "acm:DeleteCertificate"
+    ]
+
+    resources = ["*"]
+  }
+
+
+  statement {
+    sid    = "ManageRoute53HostedZone"
+    effect = "Allow"
+
+    actions = [
+      "route53:GetHostedZone",
+      "route53:ListResourceRecordSets",
+      "route53:ChangeResourceRecordSets"
+    ]
+
+    resources = [
+      "arn:aws:route53:::hostedzone/Z03318022M6754FRNIKCL"
+    ]
+  }
+
+  statement {
+    sid    = "ReadRoute53Changes"
+    effect = "Allow"
+
+    actions = [
+      "route53:GetChange"
+    ]
+
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
