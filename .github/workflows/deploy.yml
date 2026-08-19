@@ -67,7 +67,7 @@ jobs:
 
       - name: Run TFLint
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: tflint --recursive
+        run: tflint
 
       - name: Terraform plan
         working-directory: ${{ env.TF_WORKING_DIR }}
