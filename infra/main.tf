@@ -25,6 +25,7 @@ module "alb" {
   certificate_arn = module.acm.certificate_arn
   vpc_id          = module.network.vpc_id
   subnet_ids      = module.network.public_subnet_ids
+  alb_logs_bucket = module.s3.bucket_id
 
   tags = local.common_tags
 }
@@ -84,4 +85,13 @@ module "acm" {
 
   domain_name = "ecs.enautomotive.co.uk"
   zone_id     = module.route53.zone_id
+}
+
+
+module "s3" {
+  source = "./modules/s3"
+
+  bucket_name = "en-automotive-alb-logs-707305182979"
+
+  tags = local.common_tags
 }

@@ -6,6 +6,13 @@ resource "aws_lb" "main" {
   subnets            = var.subnet_ids
 
   enable_deletion_protection = false
+  drop_invalid_header_fields = true
+
+  access_logs {
+    bucket  = var.alb_logs_bucket
+    prefix  = "alb"
+    enabled = true
+  }
 
   tags = var.tags
 }
@@ -65,6 +72,7 @@ resource "aws_security_group" "alb" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description = "Allow HTTP traffic for redirect to HTTPS"
     from_port   = var.listener_port
     to_port     = var.listener_port
     protocol    = "tcp"
@@ -72,6 +80,7 @@ resource "aws_security_group" "alb" {
   }
 
   ingress {
+    description = "Allow HTTPS traffic"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
@@ -79,6 +88,7 @@ resource "aws_security_group" "alb" {
   }
 
   egress {
+    description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
