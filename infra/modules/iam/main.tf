@@ -167,7 +167,7 @@ data "aws_iam_policy_document" "github_actions_permissions" {
       "acm:RequestCertificate",
       "acm:AddTagsToCertificate",
       "acm:DeleteCertificate"
-  ]
+    ]
 
     resources = ["*"]
   }
@@ -182,12 +182,12 @@ data "aws_iam_policy_document" "github_actions_permissions" {
       "route53:ListResourceRecordSets",
       "route53:ChangeResourceRecordSets",
       "route53:ListTagsForResource"
-  ]
+    ]
 
     resources = [
       "arn:aws:route53:::hostedzone/Z03318022M6754FRNIKCL"
-  ]
-}
+    ]
+  }
 
   statement {
     sid    = "ReadRoute53Changes"
@@ -195,10 +195,10 @@ data "aws_iam_policy_document" "github_actions_permissions" {
 
     actions = [
       "route53:GetChange"
-  ]
+    ]
 
     resources = ["*"]
-}
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
