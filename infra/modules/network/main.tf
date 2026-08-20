@@ -39,4 +39,47 @@ resource "aws_route_table_association" "public" {
 }
 
 
+resource "aws_subnet" "private" {
+  count = length(var.private_subnet_cidrs)
 
+  vpc_id                  = aws_vpc.this.id
+  cidr_block              = var.private_subnet_cidrs[count.index]
+  map_public_ip_on_launch = false
+  availability_zone       = var.availability_zones[count.index]
+
+  tags = var.tags
+}
+
+resource "aws_eip" "nat" {
+  domain = "vpc"
+
+  tags = var.tags
+}
+
+resource "aws_nat_gateway" "this" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public[0].id
+
+  depends_on = [aws_internet_gateway.this]
+
+  tags = var.tags
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.this.id
+
+  tags = var.tags
+}
+
+resource "aws_route" "private_internet_access" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.this.id
+}
+
+resource "aws_route_table_association" "private" {
+  count = length(var.private_subnet_cidrs)
+
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private.id
+}

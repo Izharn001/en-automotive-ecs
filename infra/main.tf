@@ -8,10 +8,11 @@ module "ecr" {
 module "network" {
   source = "./modules/network"
 
-  vpc_cidr            = var.vpc_cidr
-  public_subnet_cidrs = var.public_subnet_cidrs
-  availability_zones  = var.availability_zones
-  tags                = local.common_tags
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  availability_zones   = var.availability_zones
+  tags                 = local.common_tags
 }
 
 module "alb" {
@@ -51,7 +52,7 @@ module "ecs" {
   container_port            = var.target_group_port
   ecs_service_desired_count = var.ecs_service_desired_count
 
-  subnet_ids            = module.network.public_subnet_ids
+  subnet_ids            = module.network.private_subnet_ids
   vpc_id                = module.network.vpc_id
   alb_security_group_id = module.alb.alb_security_group_id
   execution_role_arn    = module.iam.execution_role_arn
