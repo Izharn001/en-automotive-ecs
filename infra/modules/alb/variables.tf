@@ -80,3 +80,8 @@ variable "alb_logs_bucket" {
   description = "S3 bucket used for ALB access logs"
   type        = string
 }
+
+variable "private_subnet_cidrs" {
+  description = "CIDR blocks of the private subnets hosting ECS tasks"
+  type        = list(string)
+}

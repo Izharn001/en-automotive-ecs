@@ -18,10 +18,11 @@ module "network" {
 module "alb" {
   source = "./modules/alb"
 
-  alb_name            = "${var.project_name}-alb"
-  target_group_name   = "${var.project_name}-target-group"
-  target_group_port   = var.target_group_port
-  security_group_name = "${var.project_name}-alb-sg"
+  alb_name             = "${var.project_name}-alb"
+  target_group_name    = "${var.project_name}-target-group"
+  target_group_port    = var.target_group_port
+  security_group_name  = "${var.project_name}-alb-sg"
+  private_subnet_cidrs = var.private_subnet_cidrs
 
   certificate_arn = module.acm.certificate_arn
   vpc_id          = module.network.vpc_id
@@ -60,6 +61,7 @@ module "ecs" {
   ecr_image_tag         = var.ecr_image_tag
   security_group_name   = "${var.project_name}-ecs-sg"
   target_group_arn      = module.alb.target_group_arn
+  logs_kms_key_arn      = module.kms.key_arn
 
   aws_region            = var.aws_region
   log_stream_prefix     = var.log_stream_prefix
@@ -93,6 +95,12 @@ module "s3" {
   source = "./modules/s3"
 
   bucket_name = "en-automotive-alb-logs-707305182979"
+
+  tags = local.common_tags
+}
+
+module "kms" {
+  source = "./modules/kms"
 
   tags = local.common_tags
 }

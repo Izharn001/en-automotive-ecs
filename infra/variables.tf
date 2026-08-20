@@ -72,7 +72,7 @@ variable "log_stream_prefix" {
 
 variable "log_retention_in_days" {
   type    = number
-  default = 14
+  default = 30
 }
 
 

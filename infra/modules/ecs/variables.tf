@@ -94,3 +94,8 @@ variable "log_stream_prefix" {
 variable "log_retention_in_days" {
   type = number
 }
+
+variable "logs_kms_key_arn" {
+  description = "KMS key ARN for ECS CloudWatch logs"
+  type        = string
+}

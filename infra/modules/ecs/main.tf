@@ -77,6 +77,7 @@ resource "aws_security_group" "ecs" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description     = "Allow traffic from ALB"
     from_port       = var.container_port
     to_port         = var.container_port
     protocol        = "tcp"
@@ -84,6 +85,7 @@ resource "aws_security_group" "ecs" {
   }
 
   egress {
+    description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -97,6 +99,7 @@ resource "aws_security_group" "ecs" {
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/ecs/${var.ecs_task_family}"
   retention_in_days = var.log_retention_in_days
+  kms_key_id        = var.logs_kms_key_arn
 
   tags = var.tags
 }
