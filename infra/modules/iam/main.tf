@@ -108,6 +108,13 @@ data "aws_iam_policy_document" "github_actions_core" {
 
     actions = [
       "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage",
       "ecr:CreateRepository",
       "ecr:DeleteRepository",
       "ecr:DescribeRepositories",
