@@ -107,6 +107,7 @@ data "aws_iam_policy_document" "github_actions_core" {
     effect = "Allow"
 
     actions = [
+      "ecr:GetAuthorizationToken",
       "ecr:CreateRepository",
       "ecr:DeleteRepository",
       "ecr:DescribeRepositories",
