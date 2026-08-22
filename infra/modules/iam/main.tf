@@ -97,6 +97,7 @@ data "aws_iam_policy_document" "github_actions_core" {
       "ecs:ListTaskDefinitions",
       "ecs:ListTasks",
       "ecs:DescribeTasks"
+
     ]
 
     resources = ["*"]
@@ -229,7 +230,11 @@ data "aws_iam_policy_document" "github_actions_network" {
       "ec2:RevokeSecurityGroupEgress",
 
       "ec2:CreateTags",
-      "ec2:DeleteTags"
+      "ec2:DeleteTags",
+
+      "ec2:CreateFlowLogs",
+      "ec2:DeleteFlowLogs",
+      "ec2:DescribeFlowLogs"
     ]
 
     resources = ["*"]
@@ -540,3 +545,4 @@ resource "aws_iam_role_policy_attachment" "github_actions_storage" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_actions_storage.arn
 }
+
