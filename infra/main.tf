@@ -12,7 +12,9 @@ module "network" {
   public_subnet_cidrs  = var.public_subnet_cidrs
   private_subnet_cidrs = var.private_subnet_cidrs
   availability_zones   = var.availability_zones
-  tags                 = local.common_tags
+
+  cloudwatch_kms_key_arn = module.kms.key_arn
+  tags                   = local.common_tags
 }
 
 module "alb" {

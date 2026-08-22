@@ -74,6 +74,7 @@ jobs:
         with:
           directory: infra
           framework: terraform
+          config-file: infra/.checkov.yaml
           quiet: true
 
       - name: Terraform plan
