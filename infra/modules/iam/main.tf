@@ -234,7 +234,10 @@ data "aws_iam_policy_document" "github_actions_network" {
 
       "ec2:CreateFlowLogs",
       "ec2:DeleteFlowLogs",
-      "ec2:DescribeFlowLogs"
+      "ec2:DescribeFlowLogs",
+
+      "ec2:DescribeVpcAttribute",
+      "ec2:DescribeAddressesAttribute"
     ]
 
     resources = ["*"]
@@ -257,12 +260,16 @@ data "aws_iam_policy_document" "github_actions_security" {
       "iam:ListRolePolicies",
       "iam:ListAttachedRolePolicies",
       "iam:AttachRolePolicy",
-      "iam:DetachRolePolicy"
+      "iam:DetachRolePolicy",
+      "iam:PutRolePolicy",
+      "iam:DeleteRolePolicy"
     ]
 
     resources = [
       aws_iam_role.this.arn,
-      aws_iam_role.github_actions.arn
+      aws_iam_role.github_actions.arn,
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.iam_role_name}-vpc-flow-logs"
+
     ]
   }
 
@@ -444,6 +451,18 @@ data "aws_iam_policy_document" "github_actions_security" {
     ]
   }
 
+
+  statement {
+    sid    = "ListKMSAliases"
+    effect = "Allow"
+
+    actions = [
+      "kms:ListAliases"
+    ]
+
+    resources = ["*"]
+  }
+
 }
 
 data "aws_iam_policy_document" "github_actions_storage" {
@@ -494,7 +513,8 @@ data "aws_iam_policy_document" "github_actions_storage" {
       "s3:GetBucketTagging",
       "s3:PutBucketTagging",
       "s3:GetBucketLocation",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:GetBucketAcl"
     ]
 
     resources = [
