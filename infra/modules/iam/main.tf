@@ -164,20 +164,26 @@ data "aws_iam_policy_document" "github_actions_core" {
 
       "elasticloadbalancing:CreateTargetGroup",
       "elasticloadbalancing:DeleteTargetGroup",
-      "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:ModifyTargetGroup",
 
       "elasticloadbalancing:CreateListener",
       "elasticloadbalancing:DeleteListener",
-      "elasticloadbalancing:DescribeListeners",
       "elasticloadbalancing:ModifyListener",
 
-      "elasticloadbalancing:DescribeTargetHealth",
 
       "elasticloadbalancing:AddTags",
-      "elasticloadbalancing:RemoveTags",
-      "elasticloadbalancing:DescribeTags",
-      "elasticloadbalancing:DescribeTargetGroupAttributes"
+      "elasticloadbalancing:RemoveTags"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ReadELBState"
+    effect = "Allow"
+
+    actions = [
+      "elasticloadbalancing:Describe*"
     ]
 
     resources = ["*"]
@@ -190,23 +196,19 @@ data "aws_iam_policy_document" "github_actions_network" {
     effect = "Allow"
 
     actions = [
-      "ec2:DescribeVpcs",
       "ec2:CreateVpc",
       "ec2:DeleteVpc",
       "ec2:ModifyVpcAttribute",
 
-      "ec2:DescribeSubnets",
       "ec2:CreateSubnet",
       "ec2:DeleteSubnet",
       "ec2:ModifySubnetAttribute",
 
-      "ec2:DescribeInternetGateways",
       "ec2:CreateInternetGateway",
       "ec2:AttachInternetGateway",
       "ec2:DetachInternetGateway",
       "ec2:DeleteInternetGateway",
 
-      "ec2:DescribeRouteTables",
       "ec2:CreateRouteTable",
       "ec2:DeleteRouteTable",
       "ec2:AssociateRouteTable",
@@ -214,15 +216,12 @@ data "aws_iam_policy_document" "github_actions_network" {
       "ec2:CreateRoute",
       "ec2:DeleteRoute",
 
-      "ec2:DescribeAddresses",
       "ec2:AllocateAddress",
       "ec2:ReleaseAddress",
 
-      "ec2:DescribeNatGateways",
       "ec2:CreateNatGateway",
       "ec2:DeleteNatGateway",
 
-      "ec2:DescribeSecurityGroups",
       "ec2:CreateSecurityGroup",
       "ec2:DeleteSecurityGroup",
       "ec2:AuthorizeSecurityGroupIngress",
@@ -234,11 +233,19 @@ data "aws_iam_policy_document" "github_actions_network" {
       "ec2:DeleteTags",
 
       "ec2:CreateFlowLogs",
-      "ec2:DeleteFlowLogs",
-      "ec2:DescribeFlowLogs",
+      "ec2:DeleteFlowLogs"
+    ]
 
-      "ec2:DescribeVpcAttribute",
-      "ec2:DescribeAddressesAttribute"
+    resources = ["*"]
+  }
+
+
+  statement {
+    sid    = "ReadNetworkState"
+    effect = "Allow"
+
+    actions = [
+      "ec2:Describe*"
     ]
 
     resources = ["*"]
@@ -307,7 +314,8 @@ data "aws_iam_policy_document" "github_actions_security" {
 
     resources = [
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.iam_role_name}",
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.iam_role_name}-github-actions"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.iam_role_name}-github-actions",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/en-automotive-vpc-flow-logs"
     ]
   }
 
@@ -504,19 +512,12 @@ data "aws_iam_policy_document" "github_actions_storage" {
     effect = "Allow"
 
     actions = [
-      "s3:GetBucketPolicy",
       "s3:PutBucketPolicy",
       "s3:DeleteBucketPolicy",
-      "s3:GetBucketPublicAccessBlock",
       "s3:PutBucketPublicAccessBlock",
-      "s3:GetLifecycleConfiguration",
       "s3:PutLifecycleConfiguration",
-      "s3:GetBucketTagging",
-      "s3:PutBucketTagging",
-      "s3:GetBucketLocation",
-      "s3:ListBucket",
-      "s3:GetBucketAcl",
-      "s3:GetBucketCors"
+      "s3:PutBucketTagging"
+
     ]
 
     resources = [
@@ -524,6 +525,19 @@ data "aws_iam_policy_document" "github_actions_storage" {
     ]
   }
 
+  statement {
+    sid    = "ReadALBLogBucket"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetBucket*",
+      "s3:ListBucket"
+    ]
+
+    resources = [
+      "arn:aws:s3:::en-automotive-alb-logs-707305182979"
+    ]
+  }
 
 
 }
