@@ -176,7 +176,8 @@ data "aws_iam_policy_document" "github_actions_core" {
 
       "elasticloadbalancing:AddTags",
       "elasticloadbalancing:RemoveTags",
-      "elasticloadbalancing:DescribeTags"
+      "elasticloadbalancing:DescribeTags",
+      "elasticloadbalancing:DescribeTargetGroupAttributes"
     ]
 
     resources = ["*"]
@@ -268,7 +269,7 @@ data "aws_iam_policy_document" "github_actions_security" {
     resources = [
       aws_iam_role.this.arn,
       aws_iam_role.github_actions.arn,
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.iam_role_name}-vpc-flow-logs"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/en-automotive-vpc-flow-logs"
 
     ]
   }
@@ -514,7 +515,8 @@ data "aws_iam_policy_document" "github_actions_storage" {
       "s3:PutBucketTagging",
       "s3:GetBucketLocation",
       "s3:ListBucket",
-      "s3:GetBucketAcl"
+      "s3:GetBucketAcl",
+      "s3:GetBucketCors"
     ]
 
     resources = [
