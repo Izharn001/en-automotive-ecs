@@ -530,7 +530,7 @@ data "aws_iam_policy_document" "github_actions_storage" {
     effect = "Allow"
 
     actions = [
-      "s3:GetBucket*",
+      "s3:Get*",
       "s3:ListBucket"
     ]
 
