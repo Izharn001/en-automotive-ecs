@@ -188,6 +188,42 @@ data "aws_iam_policy_document" "github_actions_core" {
 
     resources = ["*"]
   }
+
+  statement {
+    sid    = "ManageSNSAlerts"
+    effect = "Allow"
+
+    actions = [
+      "sns:GetTopicAttributes",
+      "sns:SetTopicAttributes",
+      "sns:ListTagsForResource",
+      "sns:TagResource",
+      "sns:UntagResource",
+      "sns:Subscribe",
+      "sns:Unsubscribe"
+    ]
+
+    resources = [
+      "arn:aws:sns:eu-west-2:${data.aws_caller_identity.current.account_id}:en-automotive-alerts"
+    ]
+
+  }
+
+  statement {
+    sid    = "CreateDeleteSNSAlerts"
+    effect = "Allow"
+
+    actions = [
+      "sns:CreateTopic",
+      "sns:DeleteTopic"
+    ]
+
+    resources = [
+      "arn:aws:sns:eu-west-2:${data.aws_caller_identity.current.account_id}:en-automotive-alerts"
+    ]
+  }
+
+
 }
 
 data "aws_iam_policy_document" "github_actions_network" {
@@ -541,6 +577,10 @@ data "aws_iam_policy_document" "github_actions_storage" {
 
 
 }
+
+
+
+
 
 resource "aws_iam_policy" "github_actions_core" {
   name   = "${var.iam_role_name}-github-actions-core"
