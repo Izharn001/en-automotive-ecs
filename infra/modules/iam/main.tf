@@ -237,7 +237,10 @@ data "aws_iam_policy_document" "github_actions_core" {
       "application-autoscaling:DeleteScalingPolicy",
       "application-autoscaling:DescribeScalableTargets",
       "application-autoscaling:DescribeScalingPolicies",
-      "application-autoscaling:DescribeScalingActivities"
+      "application-autoscaling:DescribeScalingActivities",
+      "application-autoscaling:ListTagsForResource",
+      "application-autoscaling:TagResource",
+      "application-autoscaling:UntagResource"
     ]
 
     resources = ["*"]
