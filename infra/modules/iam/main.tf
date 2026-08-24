@@ -200,7 +200,10 @@ data "aws_iam_policy_document" "github_actions_core" {
       "sns:TagResource",
       "sns:UntagResource",
       "sns:Subscribe",
-      "sns:Unsubscribe"
+      "sns:Unsubscribe",
+      "sns:GetSubscriptionAttributes",
+      "sns:SetSubscriptionAttributes",
+      "sns:ListSubscriptionsByTopic"
     ]
 
     resources = [
@@ -221,6 +224,40 @@ data "aws_iam_policy_document" "github_actions_core" {
     resources = [
       "arn:aws:sns:eu-west-2:${data.aws_caller_identity.current.account_id}:en-automotive-alerts"
     ]
+  }
+
+  statement {
+    sid    = "ManageApplicationAutoScaling"
+    effect = "Allow"
+
+    actions = [
+      "application-autoscaling:RegisterScalableTarget",
+      "application-autoscaling:DeregisterScalableTarget",
+      "application-autoscaling:PutScalingPolicy",
+      "application-autoscaling:DeleteScalingPolicy",
+      "application-autoscaling:DescribeScalableTargets",
+      "application-autoscaling:DescribeScalingPolicies",
+      "application-autoscaling:DescribeScalingActivities"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ManageCloudWatchAlarms"
+    effect = "Allow"
+
+    actions = [
+      "cloudwatch:DescribeAlarms",
+      "cloudwatch:DescribeAlarmsForMetric",
+      "cloudwatch:PutMetricAlarm",
+      "cloudwatch:DeleteAlarms",
+      "cloudwatch:TagResource",
+      "cloudwatch:UntagResource",
+      "cloudwatch:ListTagsForResource"
+    ]
+
+    resources = ["*"]
   }
 
 
