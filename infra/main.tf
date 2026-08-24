@@ -106,3 +106,20 @@ module "kms" {
 
   tags = local.common_tags
 }
+
+
+module "monitoring" {
+  source = "./modules/monitoring"
+
+  project_name = var.project_name
+
+  ecs_cluster_name = module.ecs.cluster_name
+  ecs_service_name = module.ecs.service_name
+
+  target_group_arn_suffix  = module.alb.target_group_arn_suffix
+  load_balancer_arn_suffix = module.alb.load_balancer_arn_suffix
+
+  alert_email = var.alert_email
+
+  tags = local.common_tags
+}

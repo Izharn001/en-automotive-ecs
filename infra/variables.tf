@@ -58,7 +58,7 @@ variable "ecs_task_memory" {
 
 variable "ecs_service_desired_count" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "ecr_image_tag" {
@@ -80,4 +80,9 @@ variable "terraform_state_bucket_arn" {
   description = "ARN of the Terraform state bucket"
   type        = string
   default     = "arn:aws:s3:::en-automotive-terraform-state"
+}
+
+variable "alert_email" {
+  description = "Email address for CloudWatch alerts"
+  type        = string
 }
